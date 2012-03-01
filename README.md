@@ -1,66 +1,37 @@
-# WD.js -- A light weight WebDriver/Se2 client for node.js
+# q-wd.js - A light weight WebDriver/Se2 client for node.js
 
-## Update node to latest
-
-http://nodejs.org/#download
-
-## Install
-
-<pre>
-npm install wd
-</pre>
+[admc/q](https://github.com/admc/wd) adapted to use promises from [Q](https://github.com/kriskowal/q)
 
 ## Authors
 
   - Adam Christian ([admc](http://github.com/admc))
   - Ruben Daniels ([javruben](https://github.com/javruben))
   - Peter Braden ([peterbraden](https://github.com/peterbraden))
+  - Stuart Knightley ([Stuk](https://github.com/Stuk))
 
 ## Usage
 
-<pre>
-): wd shell
-> x = wd.remote() or wd.remote("ondemand.saucelabs.com", 80, "username", "apikey")
-> x.init() or x.init({desired capabilities ovveride})
-> x.get("http://www.url.com")
-> x.eval("window.location.href", function(e, o) { console.log(o) })
-> x.quit()
-</pre>
+```javascript
+var webdriver = require("q-wd")
 
-
-## Writing a test!
-
-<pre>
-var webdriver = require("wd")
-
-//get a new intsance
 var browser = webdriver.remote();
-
-//instantiate the session
-browser.init({browserName:"chrome"}, function() {
-  //goto url
-  browser.get("http://www.jelly.io", function() {
-    //exec js
-    browser.eval("window.location.href", function(a, o) {
-      //print the js output
-      console.log(o);
-      //goto another url
-      browser.get("http://www.seleniumhq.org", function() {
-        //kill the session and browser
-        browser.quit(function() {
-          //kill the session
-          console.log("DONE!");
-        })
-      })
-    })
-  })
-})
-
-</pre>
+browser.init({browserName:"firefox"}).then(function() {
+  return browser.get("http://www.jelly.io");
+}).then(function() {
+  return browser.eval("window.location.href");
+}).then(function(o) {
+  console.log(o);
+  return browser.get("http://www.seleniumhq.org");
+}).then(function() {
+  return browser.quit();
+}).then(function() {
+  console.log("DONE");
+});
+```
 
 ## Supported Methods
 
-<pre>
+```
   - 'close': Close the browser
   - 'quit': Quit the session
   - 'eval': Eval JS and return the value (takes a code string)
@@ -78,10 +49,9 @@ browser.init({browserName:"chrome"}, function() {
   - 'type': Type! (takes an element, a key character, or an array of char keys)
   - 'active': Get the element on the page currently with focus
   - 'keyToggle': Press a keyboard key (takes an element and a key character'
-</pre>
+```
 
 ## More docs!
-<pre>
-WD is simply implementing the Selenium JsonWireProtocol, for more details see the official docs:
- - <a href="http://code.google.com/p/selenium/wiki/JsonWireProtocol">http://code.google.com/p/selenium/wiki/JsonWireProtocol</a>
-</pre>
+
+WD is simply implementing the Selenium JsonWireProtocol, for more details see the official docs: <a href="http://code.google.com/p/selenium/wiki/JsonWireProtocol">http://code.google.com/p/selenium/wiki/JsonWireProtocol</a>
+
