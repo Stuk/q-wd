@@ -13,4 +13,7 @@
 , "main" : "./lib/main"
 , "bin" : { "wd" : "./lib/bin.js" }
 , "directories" : { "lib" : "./lib" }
+, "dependencies": {
+    "q": ">=0.7.0"
+  }
 }
